@@ -1,9 +1,7 @@
 import './css/style.css'
+import { LoginComponent } from './Components'
 
+const login = new LoginComponent();
+const appContainer = document.querySelector<HTMLDivElement>('#app')!;
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-   Start project
-  </div>
-`
-
+appContainer.appendChild(login.render())
