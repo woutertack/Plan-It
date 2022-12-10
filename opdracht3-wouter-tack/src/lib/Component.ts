@@ -5,10 +5,12 @@
 class Component {
   name: string;
   model: {};
+  routerPath
 
-  constructor({name, model,}: {name: string, model: {}}){
+  constructor({name, model,routerPath}: {name: string, model: {}, routerPath: any}){
     this.name = name;
-    this.model = model
+    this.model = model;
+    this.routerPath = routerPath
   }
 
   render() : HTMLElement{
