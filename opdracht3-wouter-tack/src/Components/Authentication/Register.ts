@@ -17,29 +17,34 @@ class RegisterComponent extends Component {
       name: 'register',
       routerPath: '/register',
       model: {
-        
+
       },
     });
   }
-  
-
 
   render() {
-    
-
     // create a home container
+    const bodyRegister = document.createElement('div');
+    bodyRegister.className = 'bodyRegister';
+
     const registerContainer = document.createElement('div');
+    registerContainer.className = 'registercontainer';
 
     // Creating the look of the page
     // make logo
-    registerContainer.innerHTML = '<i class="fa-solid fa-calendar-days"></i>'
+    registerContainer.appendChild(
+      Elements.createLogo({
+        innerHTML: '<i class="fa-solid fa-calendar-days"></i>',
+        className: 'logo',
+
+      }),
+    );
     registerContainer.appendChild(
       Elements.createP({
         textContent: 'Welcome to Plan It!',
-        className: 'title'
-      })
-    )
-
+        className: 'title',
+      }),
+    );
 
     registerContainer.appendChild(
       Elements.createP({
@@ -54,7 +59,7 @@ class RegisterComponent extends Component {
         id: 'register__username',
         className: 'register__username',
         type: 'text',
-        placeholder: "Username",
+        placeholder: 'Username',
       }),
     );
 
@@ -63,7 +68,7 @@ class RegisterComponent extends Component {
         id: 'register__email',
         className: 'register__email',
         type: 'text',
-        placeholder: "Email",
+        placeholder: 'Email',
       }),
     );
 
@@ -72,7 +77,7 @@ class RegisterComponent extends Component {
         id: 'register__password',
         className: 'register__password',
         type: 'password',
-        placeholder: "Password",
+        placeholder: 'Password',
       }),
     );
 
@@ -85,7 +90,7 @@ class RegisterComponent extends Component {
         className: 'registerButton',
         textContent: 'REGISTER',
         onClick: () => {
-          register()
+          register();
         },
       }),
     );
@@ -103,8 +108,8 @@ class RegisterComponent extends Component {
         },
       }),
     );
-    return registerContainer;
-
+    bodyRegister.appendChild(registerContainer);
+    return bodyRegister;
   }
 }
 

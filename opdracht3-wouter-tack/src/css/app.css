@@ -10,10 +10,7 @@
 
 body {
 	background: #f6f5f7;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
+	
 	font-family: 'Montserrat', sans-serif;
 	height: 90vh;
 	overflow-y: hidden;
@@ -68,19 +65,29 @@ input:focus{
 .fa-solid{
   display:flex;
 	justify-content:center;
-	font-size: 60px;
+
 	color: var(--primary-color)
 }
 
+.bodyLogin, .bodyRegister{
+	display: flex;
+	justify-content: center;
+	
+}
 
-i.fa-solid.fa-calendar-days{
+.logincontainer, .registercontainer{
+	display: flex;
+	flex-direction: column;
+	padding-top: 60px;
+	
+}
+.logo{
 	display:flex;
 	justify-content:center;
 	font-size: 60px;
 	color: var(--primary-color)
-} 
-
-.title, .titleChatroom{
+}
+.title{
 	
 	display: flex;
 	justify-content: center;
@@ -90,20 +97,7 @@ i.fa-solid.fa-calendar-days{
 } 
 
 
-
-
-
-
-
-
-
-/* 	new css  */
-.logo{
-	background-color:red;
-	color:red;
-} 
-
-.login_header,.register_header, .titleChatroom{
+.login_header,.register_header{
 	display: flex;
 	justify-content: center;
 	margin-top: 20px;
@@ -167,3 +161,26 @@ i.fa-solid.fa-calendar-days{
 	border-color: var(--secondary-color)
 }
 
+/* header */
+.headerContainer{
+	display:flex;
+	align-items:top;
+	justify-content: space-between;
+	font-size: 40px;
+	padding-top: 30px;
+	padding-bottom: 15px;
+	border-bottom: solid 2px var(--primary-transparant);
+}
+
+.navbars{
+	padding-left: 18px;
+}
+
+.logoHeader{
+	color: var(--primary-color);
+	
+}
+
+.logoutBtn{
+	padding-right: 18px;
+}

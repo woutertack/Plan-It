@@ -1,29 +1,25 @@
-import Component from "../../lib/Component";
-import Elements from "../../lib/Elements";
+import Component from '../../lib/Component';
+import Elements from '../../lib/Elements';
 
 import {
-  getAuth,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  FacebookAuthProvider,
-  GithubAuthProvider
-} from 'firebase/auth'
+  signin, signInWithGoogle, facebookLogin, githubLogin,
+} from './Auth';
 
-
-class LoginComponent extends Component{
-  constructor(){
+class LoginComponent extends Component {
+  constructor() {
     super({
       name: 'Login',
       model: {},
-      routerPath: '/'
-    })
+      routerPath: '/',
+    });
   }
 
+  render() {
+    const bodyLogin = document.createElement('div');
+    bodyLogin.className = 'bodyLogin';
 
-  
-  render(){
     const loginContainer = document.createElement('div');
+    loginContainer.className = 'logincontainer';
 
     // Creating the look of the page
 
@@ -31,17 +27,16 @@ class LoginComponent extends Component{
     loginContainer.appendChild(
       Elements.createLogo({
         innerHTML: '<i class="fa-solid fa-calendar-days"></i>',
-        className: 'logo'
-        
-      })
-    )
+        className: 'logo',
+
+      }),
+    );
     loginContainer.appendChild(
       Elements.createP({
         textContent: 'Welcome to Plan It!',
-        className: 'title'
-      })
-    )
-
+        className: 'title',
+      }),
+    );
 
     loginContainer.appendChild(
       Elements.createP({
@@ -50,13 +45,13 @@ class LoginComponent extends Component{
       }),
     );
 
-    //Login form
+    // Login form
     loginContainer.appendChild(
       Elements.createInput({
         id: 'login__email',
         className: 'login__email',
         // type: inputEm,
-        placeholder: "Email",
+        placeholder: 'Email',
       }),
     );
 
@@ -65,7 +60,7 @@ class LoginComponent extends Component{
         id: 'login__password',
         className: 'login__password',
         // type: inputPW,
-        placeholder: "Password",
+        placeholder: 'Password',
       }),
     );
 
@@ -78,8 +73,7 @@ class LoginComponent extends Component{
         className: 'loginButton',
         textContent: 'LOGIN',
         onClick: () => {
-          this.signin();
-
+          signin();
         },
       }),
     );
@@ -90,40 +84,46 @@ class LoginComponent extends Component{
       }),
     );
 
-    //social media container 
+    // social media container
     const socialsContainer = document.createElement('div');
-    socialsContainer.className = 'socialContainer'
+    socialsContainer.className = 'socialContainer';
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     socialsContainer.appendChild(
-        Elements.createSocialMediaButton({
-          innerHTML: '<i class="fab fa-google-plus-g"></i>',
-          className: 'google',
-          onClick: () => {
-            this.signInWithGoogle()
-          }
+      Elements.createSocialMediaButton({
+        innerHTML: '<i class="fab fa-google-plus-g"></i>',
+        className: 'google',
+        onClick: () => {
+          signInWithGoogle();
+        },
 
-        })),
-      socialsContainer.appendChild(
-        Elements.createSocialMediaButton({
-          innerHTML: '<i class="fab fa-facebook-f"></i>',
-          className: 'facebook',
-          onClick: () => {
-            this.facebookLogin()
-          }
+      }),
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    socialsContainer.appendChild(
+      Elements.createSocialMediaButton({
+        innerHTML: '<i class="fab fa-facebook-f"></i>',
+        className: 'facebook',
+        onClick: () => {
+          facebookLogin();
+        },
 
-        })),
-      socialsContainer.appendChild(
-        Elements.createSocialMediaButton({
-          innerHTML: '<i class="fa-brands fa-github"></i>',
-          className: 'github',
-          onClick: () => {
-            this.githubLogin()
-          }
+      }),
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    socialsContainer.appendChild(
+      Elements.createSocialMediaButton({
+        innerHTML: '<i class="fa-brands fa-github"></i>',
+        className: 'github',
+        onClick: () => {
+          githubLogin();
+        },
 
-        }))
+      }),
+    );
 
-    loginContainer.appendChild(socialsContainer)
-   
+    loginContainer.appendChild(socialsContainer);
+
     // No account, Register element
     loginContainer.appendChild(
       Elements.createP({
@@ -140,9 +140,10 @@ class LoginComponent extends Component{
         },
       }),
     );
-    return loginContainer;
 
+    bodyLogin.appendChild(loginContainer)
+    return bodyLogin;
   }
 }
 
-export default LoginComponent
+export default LoginComponent;
