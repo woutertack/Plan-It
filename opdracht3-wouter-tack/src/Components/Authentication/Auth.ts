@@ -21,7 +21,7 @@ function register() {
       // Profile updated!
       localStorage.setItem('emaiLoggedInUser', email);
       localStorage.setItem('username', username);
-      location.replace('./dashboard');
+      window.location.replace('./dashboard');
     }).catch((error) => {
       // An error occurred
       console.log(error);
@@ -37,7 +37,7 @@ function signin() {
   signInWithEmailAndPassword(auth, signinEmail, signinPassw)
     .then(() => {
       // Signed in
-      location.replace('/dashboard');
+      window.location.replace('/dashboard');
       localStorage.setItem('emaiLoggedInUser', signinEmail);
     })
     .catch((error) => {
@@ -58,7 +58,7 @@ function signInWithGoogle() {
         user,
       } = result;
       localStorage.setItem('emaiLoggedInUser', user.email);
-      location.replace('/dashboard');
+      window.location.replace('/dashboard');
     }).catch((error) => {
       // Handle Errors here.
       const errorMessage = error.message;
@@ -74,7 +74,7 @@ function facebookLogin() {
 
   signInWithPopup(auth, facebookProvider)
     .then(() => {
-      location.replace('/dashboard');
+      window.location.replace('/dashboard');
     })
     .catch((err) => {
       alert(err.message);
@@ -89,7 +89,7 @@ function githubLogin() {
 
   signInWithPopup(auth, githubProvider)
     .then(() => {
-      location.replace('/dashboard');
+      window.location.replace('/dashboard');
     })
     .catch((err) => {
       alert(err.message);
@@ -102,7 +102,7 @@ function logout() {
   const auth = getAuth();
   signOut(auth)
     .then(() => {
-      location.replace('/');
+      window.location.replace('/');
       localStorage.clear();
     })
     .catch((err) => {

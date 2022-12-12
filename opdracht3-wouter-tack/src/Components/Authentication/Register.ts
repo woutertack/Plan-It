@@ -104,7 +104,7 @@ class RegisterComponent extends Component {
         className: 'RegisterBackBtn',
         textContent: 'Already have an account? Sign in here!',
         onClick: () => {
-          location.replace('/');
+          window.location.replace('/');
         },
       }),
     );

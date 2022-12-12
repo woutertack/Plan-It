@@ -1,5 +1,5 @@
 import './css/style.css';
-import { LoginComponent, RegisterComponent, DashboardComponent } from './Components';
+import { LoginComponent, RegisterComponent, DashboardComponent, CreateTaskComponent } from './Components';
 import App from './App';
 
 const initApp = () => {
@@ -9,6 +9,7 @@ const initApp = () => {
   app.addComponent(new LoginComponent());
   app.addComponent(new RegisterComponent());
   app.addComponent(new DashboardComponent());
+  app.addComponent(new CreateTaskComponent());
 };
 
 window.addEventListener('load', initApp);

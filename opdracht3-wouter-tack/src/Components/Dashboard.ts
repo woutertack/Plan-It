@@ -11,7 +11,7 @@ import {
   database,
 } from '../lib/Firebase';
 
-import { logout } from './Authentication/Auth';
+import { createHeader } from './header';
 
 class DashboardComponent extends Component {
   constructor() {
@@ -24,49 +24,25 @@ class DashboardComponent extends Component {
     });
   }
 
-  // function to delete a chatroom Not finished yet
-  // deleteChatroom () {
-
-  //   deleteDoc(doc(database, "chatrooms", item.id));
-  //   location.replace('/')
-  // }
-
   render() {
-    const headerContainer = document.createElement('header');
-    headerContainer.className = 'headerContainer';
     const mainContainer = document.createElement('main');
 
-    headerContainer.appendChild(
-      Elements.createSocialMediaButton({
-        innerHTML: '<i class="fa-solid fa-bars"></i>',
-        className: 'navbars',
+    mainContainer.appendChild(createHeader());
+
+    const createTaskContainerBtn = document.createElement('div');
+    createTaskContainerBtn.className = 'divCreateTask';
+
+    createTaskContainerBtn.appendChild(
+      Elements.createButton({
+        textContent: 'Create new task',
+        className: 'createTaskBtn',
         onClick: () => {
-          console.log('here comes navbar');
+          window.location.replace('./create-task');
         },
       }),
     );
 
-    headerContainer.appendChild(
-      Elements.createSocialMediaButton({
-        innerHTML: 'Plan It!',
-        className: 'logoHeader',
-        onClick: () => {
-          location.replace('/dashboard');
-        },
-      }),
-    );
-
-    headerContainer.appendChild(
-      Elements.createSocialMediaButton({
-        innerHTML: '<i class="fa-solid fa-right-from-bracket"></i>',
-        className: 'logoutBtn',
-        onClick: () => {
-          logout();
-        },
-      }),
-    );
-
-    mainContainer.appendChild(headerContainer);
+    mainContainer.appendChild(createTaskContainerBtn);
     return mainContainer;
   }
 }

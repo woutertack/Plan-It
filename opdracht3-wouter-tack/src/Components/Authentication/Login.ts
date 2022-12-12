@@ -136,12 +136,12 @@ class LoginComponent extends Component {
         className: 'MakeAnAccount',
         textContent: 'Make an account',
         onClick: () => {
-          location.replace('/register');
+          window.location.replace('/register');
         },
       }),
     );
 
-    bodyLogin.appendChild(loginContainer)
+    bodyLogin.appendChild(loginContainer);
     return bodyLogin;
   }
 }
