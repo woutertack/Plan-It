@@ -7,10 +7,17 @@ import {
   FacebookAuthProvider,
   GithubAuthProvider,
   signOut,
+  getAdditionalUserInfo,
 } from 'firebase/auth';
+
+import { addDoc, collection } from 'firebase/firestore';
+import {
+  database,
+} from '../../lib/Firebase';
 
 // register function
 function register() {
+  const collectionRef = collection(database, 'users');
   const username : string = (< HTMLInputElement >document.getElementById('register__username')).value;
   const email : string = (< HTMLInputElement >document.getElementById('register__email')).value;
   const password : string = (< HTMLInputElement >document.getElementById('register__password')).value;
@@ -19,13 +26,17 @@ function register() {
   createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
       // Profile updated!
-      localStorage.setItem('emaiLoggedInUser', email);
-      localStorage.setItem('username', username);
+      localStorage.setItem('emailUser', email);
       window.location.replace('./dashboard');
     }).catch((error) => {
       // An error occurred
       console.log(error);
     });
+
+  addDoc(collectionRef, {
+    userEmail: email,
+    userName: username,
+  });
 }
 
 // Sign in function
@@ -37,8 +48,8 @@ function signin() {
   signInWithEmailAndPassword(auth, signinEmail, signinPassw)
     .then(() => {
       // Signed in
+      localStorage.setItem('emailUser', signinEmail);
       window.location.replace('/dashboard');
-      localStorage.setItem('emaiLoggedInUser', signinEmail);
     })
     .catch((error) => {
       const errorMessage = error.message;
@@ -46,23 +57,31 @@ function signin() {
     });
 }
 
-// Sign in with google
+// Sign in with google + check if email already exists in database if not it will be added
 function signInWithGoogle() {
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
 
+  // const collectionRef = collection(database, 'users');
   signInWithPopup(auth, googleProvider)
-    .then((result: any) => {
+    .then(async (result: any) => {
       // The signed-in user info.
-      const {
-        user,
-      } = result;
-      localStorage.setItem('emaiLoggedInUser', user.email);
+      const { email } = result.user;
+      const username = email?.substring(0, email.indexOf('@'));
+      // check if user is in database already
+      const { isNewUser } = getAdditionalUserInfo(result);
+
+      if (isNewUser) {
+        await addDoc(collection(database, 'users'), {
+          userEmail: email,
+          userName: username,
+        });
+      }
+      localStorage.setItem('emailUser', email);
       window.location.replace('/dashboard');
     }).catch((error) => {
       // Handle Errors here.
       const errorMessage = error.message;
-
       // The AuthCredential type that was used.
       alert(`An error has occurred, the error is ${errorMessage}!`);
     });
@@ -73,7 +92,9 @@ function facebookLogin() {
   const facebookProvider = new FacebookAuthProvider();
 
   signInWithPopup(auth, facebookProvider)
-    .then(() => {
+    .then(async (result: any) => {
+      const { email } = result.user;
+      localStorage.setItem('emailUser', email);
       window.location.replace('/dashboard');
     })
     .catch((err) => {

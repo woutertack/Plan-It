@@ -13,7 +13,7 @@ body {
 	
 	font-family: 'Montserrat', sans-serif;
 	height: 90vh;
-	overflow-y: hidden;
+	
 }
 
 
@@ -55,7 +55,7 @@ input {
     border-radius: 5px;
 	padding: 12px 15px;
 	margin: 12px 0;
-	width: 100%;
+	
 }
 input:focus{
     outline: none;
@@ -198,23 +198,28 @@ input:focus{
 }
 
 .createTaskBtn{
-	margin: 50px 0;
+	margin: 80px 0;
 }
 
-.createTaskContainer{
-	/* border-top: solid 3px var(--primary-color);
-	border-top-left-radius: 5px;
-	overflow-y: scroll; */
+.createTaskContainer, .mainDiv{
 	box-shadow: 0 -3px 6px rgba(0, 0, 0, .2);;
+	background: #f6f5f7;
     border-radius: 28px 28px 0 0;
     height: calc(100% - 100px);
     padding: 14px 7%;
-    padding-bottom: 650px;
-    overflow-y: scroll;
+    padding-bottom: 950px;
+   
 		display: flex;
 		justify-content: center;
 		flex-direction: column;
+		align-items:center
 }
+
+.createTaskContainer input{
+	width: 250px;
+}
+
+
 
 .CreateTaskText{
 	display: flex;
@@ -231,5 +236,19 @@ input:focus{
 
 .taskTitle{
 
+}
+
+.usercontainer{
+	display: flex;
+	justify-content: start;
+	width: 250px;
+
+}
+.checkbox{
+	margin: auto;
+	margin-left: 0px;
+	margin-right: 0px;
+	
+	max-width: 42px;
 }
 

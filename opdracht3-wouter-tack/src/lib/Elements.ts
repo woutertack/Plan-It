@@ -11,6 +11,7 @@ interface Options {
   type?: string,
   placeholder?: string,
   src?: any,
+  value?: string,
 }
 const Elements = {
   createButton({
@@ -56,7 +57,7 @@ const Elements = {
   // },
 
   createInput({
-    id = '', className = '', type = 'text', name = '', placeholder = '',
+    id = '', className = '', type = 'text', name = '', placeholder = '', value = '',
   }: Options) {
     const input = document.createElement('input');
     input.id = id;
@@ -64,6 +65,7 @@ const Elements = {
     input.name = name;
     input.className = className;
     input.placeholder = placeholder;
+    input.value = value;
     return input;
   },
 
@@ -136,7 +138,7 @@ const Elements = {
   },
 
   createCalendar({
-    textContent = '', type = '', className = '', id = '', value = '',min = '', max = ''
+    textContent = '', type = '', className = '', id = '', value = '', min = '', max = '',
   }) {
     const input = document.createElement('input');
     input.type = type;

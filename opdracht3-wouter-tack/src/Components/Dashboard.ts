@@ -26,8 +26,18 @@ class DashboardComponent extends Component {
 
   render() {
     const mainContainer = document.createElement('main');
-
     mainContainer.appendChild(createHeader());
+
+    const mainDiv = document.createElement('div');
+    mainDiv.className = 'mainDiv';
+
+    mainDiv.appendChild(
+      Elements.createP({
+        textContent: 'Your project(s)',
+        className: 'label',
+      }),
+    );
+    mainContainer.appendChild(mainDiv);
 
     const createTaskContainerBtn = document.createElement('div');
     createTaskContainerBtn.className = 'divCreateTask';

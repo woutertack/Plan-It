@@ -1,8 +1,10 @@
 import {
   getDocs,
   collection,
-  doc,
+  addDoc,
+  setDoc,
   deleteDoc,
+  serverTimestamp,
 } from 'firebase/firestore';
 import Component from '../lib/Component';
 import Elements from '../lib/Elements';
@@ -11,7 +13,6 @@ import {
   database,
 } from '../lib/Firebase';
 import { createHeader } from './header';
-import { logout } from './Authentication/Auth';
 
 class CreateTaskComponent extends Component {
   constructor() {
@@ -24,22 +25,39 @@ class CreateTaskComponent extends Component {
     });
   }
 
-  createChatroom() {
+  // eslint-disable-next-line class-methods-use-this
+  createTask() {
     const collectionRef = collection(database, 'projects');
     const titleTask: string = (< HTMLInputElement > document.getElementById('titleTask')).value;
-
+    const deadlineTask: any = (< HTMLInputElement > document.getElementById('calender')).value;
+    const subTask: string = (< HTMLInputElement > document.getElementById('subTask')).value;
+    const email = localStorage.getItem('emailUser');
+    // add task to firebase
     addDoc(collectionRef, {
       title: titleTask,
-      deadline: timestamp,
+      deadline: deadlineTask,
       createdAt: serverTimestamp(),
-      members: invitedMembers,
+      createdBy: email,
+      members: '',
       questions: '',
       checklist: false,
       timer: 0,
     })
-      .then(() => {
-        alert('Chatroom created');
-        location.replace('/dashboard');
+      .then((docRef) => {
+        // add subtasks to firebase
+        console.log('Document written with ID: ', docRef.id);
+        const collectionRefSubtask = collection(database, 'projects', docRef.id, 'subtasks');
+        addDoc(collectionRefSubtask, {
+          title: subTask,
+
+        })
+          .then(() => {
+            window.location.replace('/dashboard');
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+        // window.location.replace('/dashboard');
       })
       .catch((err) => {
         alert(err.message);
@@ -48,6 +66,7 @@ class CreateTaskComponent extends Component {
 
   render() {
     const mainContainer = document.createElement('div');
+
     // create header
     mainContainer.appendChild(createHeader());
 
@@ -70,8 +89,8 @@ class CreateTaskComponent extends Component {
     );
     createTaskContainer.appendChild(
       Elements.createInput({
-        className: 'taskTitle',
-        id: 'taskTitle',
+        className: 'titleTask',
+        id: 'titleTask',
         placeholder: 'Title task',
       }),
     );
@@ -89,12 +108,71 @@ class CreateTaskComponent extends Component {
         className: 'calendar',
         id: 'calender',
         type: 'date',
-        value: '2018-07-22',
-        min: '2018-01-01',
-        max: '2018-12-31',
+        min: '2023-01-01',
+        max: '2025-12-31',
 
       }),
     );
+
+    createTaskContainer.appendChild(
+      Elements.createInput({
+        className: 'titleTask',
+        id: 'subTask',
+        placeholder: 'Title subtask',
+      }),
+    );
+    createTaskContainer.appendChild(
+      Elements.createP({
+        textContent: 'Invite people',
+        className: 'label',
+      }),
+    );
+
+    // members to invite
+    const loadMembers = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(database, 'users'));
+        querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+          const usercontainer = document.createElement('div');
+          usercontainer.className = 'usercontainer';
+          usercontainer.appendChild(
+            Elements.createInput({
+              type: 'checkbox',
+              className: 'checkbox',
+              id: 'checkbox',
+              name: 'checkbox',
+              value: doc.data().userEmail,
+            }),
+          );
+          usercontainer.appendChild(
+            Elements.createP({
+              textContent: doc.data().userEmail,
+              type: 'checkbox',
+
+            }),
+          );
+          createTaskContainer.appendChild(usercontainer);
+        });
+      } catch {
+        console.log('error loading members');
+      }
+    };
+
+    window.addEventListener('load', loadMembers());
+    const createTaskContainerBtn = document.createElement('div');
+    createTaskContainerBtn.className = 'divCreateTask';
+    createTaskContainerBtn.appendChild(
+      Elements.createButton({
+        textContent: 'Create task',
+        className: 'createTaskBtn',
+        onClick: () => {
+          this.createTask();
+        },
+
+      }),
+    );
+    mainContainer.appendChild(createTaskContainerBtn);
     mainContainer.appendChild(createTaskContainer);
 
     return mainContainer;
