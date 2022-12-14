@@ -26,6 +26,29 @@ h2 {
 	text-align: center;
 }
 
+h3{
+	font-size: 20px;
+	word-wrap: break-word;
+	max-width: 250px;
+	padding: 0px;
+	margin-bottom: 0px;
+}
+
+h4{
+	font-size: 15px;
+	word-wrap: break-word;
+	max-width: 250px;
+	padding: 0px;
+	margin-bottom: 0px;
+}
+
+h5{
+	font-size: 12px;
+	word-wrap: break-word;
+	max-width: 250px;
+	padding: 0px;
+
+}
 
 
 button {
@@ -252,3 +275,7 @@ input:focus{
 	max-width: 42px;
 }
 
+.taskInfo{
+	margin-top: 10px;
+	padding-bottom: 0px;
+}

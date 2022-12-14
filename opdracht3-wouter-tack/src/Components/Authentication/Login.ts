@@ -59,7 +59,7 @@ class LoginComponent extends Component {
       Elements.createInput({
         id: 'login__password',
         className: 'login__password',
-        // type: inputPW,
+        type: 'password',
         placeholder: 'Password',
       }),
     );

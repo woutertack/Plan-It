@@ -38,10 +38,12 @@ class CreateTaskComponent extends Component {
       deadline: deadlineTask,
       createdAt: serverTimestamp(),
       createdBy: email,
-      members: '',
+      invited_members: '',
+      joined_members: '',
       questions: '',
       checklist: false,
       timer: 0,
+      points: 0,
     })
       .then((docRef) => {
         // add subtasks to firebase
@@ -162,12 +164,31 @@ class CreateTaskComponent extends Component {
     window.addEventListener('load', loadMembers());
     const createTaskContainerBtn = document.createElement('div');
     createTaskContainerBtn.className = 'divCreateTask';
+
+    function getcheckboxes() {
+      const checkboxes = document.getElementsByName('checkbox');
+
+      let result = [];
+
+      for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          result.push(checkboxes[i].value)
+          // result += `${checkboxes[i].value
+          // } `;
+        }
+      }
+      console.log(result);
+    }
+
+    // const checkboxValues = document.querySelector('.checkbox:checked');
     createTaskContainerBtn.appendChild(
       Elements.createButton({
         textContent: 'Create task',
         className: 'createTaskBtn',
         onClick: () => {
-          this.createTask();
+          // this.createTask();
+          getcheckboxes();
+          // console.log(checkboxValues);
         },
 
       }),
