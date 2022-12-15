@@ -35,7 +35,7 @@ h3{
 }
 
 h4{
-	font-size: 15px;
+	font-size: 13px;
 	word-wrap: break-word;
 	max-width: 250px;
 	padding: 0px;
@@ -43,7 +43,7 @@ h4{
 }
 
 h5{
-	font-size: 12px;
+	font-size: 10px;
 	word-wrap: break-word;
 	max-width: 250px;
 	padding: 0px;
@@ -211,8 +211,8 @@ input:focus{
 
 
 .divCreateTask{
-	position: absolute;
-    bottom: 0;
+	
+ 
     width: 100%;
     padding: 0 7%;
     background: linear-gradient(to top, white 50%, rgba(255, 255, 255, 0));
@@ -221,28 +221,36 @@ input:focus{
 }
 
 .createTaskBtn{
-	margin: 80px 0;
+	margin: 30px 0;
 }
+.mainDiv{
 
-.createTaskContainer, .mainDiv{
+	max-height: 765px;
+}
+.createTaskContainer,.mainDiv{
 	box-shadow: 0 -3px 6px rgba(0, 0, 0, .2);;
 	background: #f6f5f7;
     border-radius: 28px 28px 0 0;
     height: calc(100% - 100px);
     padding: 14px 7%;
-    padding-bottom: 950px;
-   
-		display: flex;
+    
+   	overflow-y: scroll;
+		display: grid;
 		justify-content: center;
 		flex-direction: column;
-		align-items:center
+		align-items:center;
+		max-height:520px;
+		border-bottom: 2px solid;
+		border-bottom-color: #f6f5f7;
 }
 
 .createTaskContainer input{
 	width: 250px;
 }
 
-
+.invitedContainer{
+	margin-bottom: 100px;
+}
 
 .CreateTaskText{
 	display: flex;
@@ -276,6 +284,11 @@ input:focus{
 }
 
 .taskInfo{
+	display: flex;
+	justify-content: center;
 	margin-top: 10px;
 	padding-bottom: 0px;
+	width: 300px;
+	margin-bottom: 15px;
+	
 }

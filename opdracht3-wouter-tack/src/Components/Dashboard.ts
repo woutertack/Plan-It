@@ -3,9 +3,12 @@ import {
   collection,
   doc,
   deleteDoc,
+  addDoc,
   query,
   where,
-  WithFieldValue,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
 
 } from 'firebase/firestore';
 import Component from '../lib/Component';
@@ -28,6 +31,25 @@ class DashboardComponent extends Component {
     });
   }
 
+  joinTask() {
+    const docRef = doc(database, 'projects', 'B9QZYfSyrAeEiTZkniD4');
+    // const collectionRef = collection(database, 'projects', 'B9QZYfSyrAeEiTZkniD4');
+    const email = localStorage.getItem('emailUser');
+
+    // invitedMembers.push(email);
+
+    updateDoc(docRef, {
+      joined_members: arrayUnion(email),
+      invited_members: arrayRemove(email),
+    })
+      .then(() => {
+        console.log('A New Document Field has been added to an existing document');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     const mainContainer = document.createElement('main');
     mainContainer.appendChild(createHeader());
@@ -35,7 +57,10 @@ class DashboardComponent extends Component {
     const mainDiv = document.createElement('div');
     mainDiv.className = 'mainDiv';
 
-    mainDiv.appendChild(
+    const yourProjectsContainer = document.createElement('div');
+    yourProjectsContainer.className = 'yourProjectsContainer';
+
+    yourProjectsContainer.appendChild(
       Elements.createP({
         textContent: 'Your project(s)',
         className: 'label',
@@ -43,12 +68,7 @@ class DashboardComponent extends Component {
     );
 
     // GETTING YOUR PROJECTS FROM FIRESTORE
-    const getModelInfo = (item) => {
-      // const timestamp = {
-      //   nanoseconds: item.data().deadline.nanoseconds,
-      //   seconds: item.data().deadline.seconds,
-      // };
-
+    const getModelInfo = (item: any) => {
       const nameTask = document.createElement('h3');
 
       const deadline = document.createElement('h4');
@@ -82,7 +102,7 @@ class DashboardComponent extends Component {
     getDocs(q)
       .then((response) => {
         (response.docs.forEach((item) => {
-          mainDiv.appendChild(
+          yourProjectsContainer.appendChild(
             Elements.createButtonSecondary({
               className: 'taskInfo',
               onClick: () => {
@@ -99,19 +119,77 @@ class DashboardComponent extends Component {
       .catch((err) => {
         console.log(err.message);
       });
+    mainDiv.appendChild(yourProjectsContainer);
+
     // GETTING PROJECTS YOU HAVE JOINED FROM FIRESTORE
+    const joinedContainer = document.createElement('div');
+    joinedContainer.className = 'joinedContainer';
 
-    // const invited = query(collectionRef, where('invited_members', 'array-contains', 'tackwouter@hotmail.com'));
-    // getDocs(invited)
-    //   .then((response) => {
-    //     (response.docs.forEach((item) => {
-    //       console.log(item);
-    //     }));
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.message);
-    //   });
+    joinedContainer.appendChild(
+      Elements.createP({
+        textContent: 'Joined project(s)',
+        className: 'label',
+      }),
+    );
 
+    const joined = query(collectionRef, where('joined_members', 'array-contains', email));
+
+    getDocs(joined)
+      .then((response) => {
+        (response.docs.forEach((item) => {
+          joinedContainer.appendChild(
+            Elements.createButtonSecondary({
+              className: 'taskInfo',
+              onClick: () => {
+                this.joinTask();
+                localStorage.setItem('taskId', item.id);
+                window.location.replace('/task');
+              },
+              children: [
+                getModelInfo(item),
+              ],
+            }),
+          );
+        }));
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    mainDiv.appendChild(joinedContainer);
+    // GETTING PROJECTS YOU HAVE JOINED FROM FIRESTORE
+    const invitedContainer = document.createElement('div');
+    invitedContainer.className = 'invitedContainer';
+
+    invitedContainer.appendChild(
+      Elements.createP({
+        textContent: 'Invited project(s)',
+        className: 'label',
+      }),
+    );
+
+    const invited = query(collectionRef, where('invited_members', 'array-contains', email));
+    getDocs(invited)
+      .then((response) => {
+        (response.docs.forEach((item) => {
+          invitedContainer.appendChild(
+            Elements.createButtonSecondary({
+              className: 'taskInfo',
+              onClick: () => {
+                this.joinTask();
+                localStorage.setItem('taskId', item.id);
+                // window.location.replace('/task');
+              },
+              children: [
+                getModelInfo(item),
+              ],
+            }),
+          );
+        }));
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    mainDiv.appendChild(invitedContainer);
     mainContainer.appendChild(mainDiv);
 
     const createTaskContainerBtn = document.createElement('div');

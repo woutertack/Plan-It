@@ -1,5 +1,7 @@
 import './css/style.css';
-import { LoginComponent, RegisterComponent, DashboardComponent, CreateTaskComponent } from './Components';
+import {
+  LoginComponent, RegisterComponent, DashboardComponent, CreateTaskComponent,
+} from './Components';
 import App from './App';
 
 const initApp = () => {

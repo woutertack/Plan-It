@@ -4,17 +4,21 @@
 
 import Router from './Router';
 import Component from './lib/Component';
-import {initFirebase} from '../src/lib/Firebase';
+import { initFirebase } from './lib/Firebase';
 
 class App {
-  constructor(parent) {
+  parent: HTMLElement | null;
+
+  components: any;
+
+  constructor(parent: HTMLElement | null) {
     this.parent = parent;
     this.components = [];
     initFirebase();
   }
 
   clearParent() {
-    while (this.parent.firstChild) {
+    while (this.parent?.firstChild) {
       this.parent.removeChild(this.parent.lastChild);
     }
   }
