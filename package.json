@@ -11,6 +11,7 @@
     "git:build": "tsc && vite build && git add . && git commit -m [WIP] && git push"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "8.22.0",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "firebase": "^9.15.0",
-    "navigo": "^8.11.1"
+    "navigo": "^8.11.1",
+    "uuid": "^9.0.0"
   }
 }

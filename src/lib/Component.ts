@@ -4,19 +4,22 @@
 
 class Component {
   name: string;
+
   model: {};
-  routerPath
+
+  routerPath;
+
   reRender: () => void;
 
-  constructor({name, model,routerPath}: {name: string, model: {}, routerPath: any}){
+  constructor({ name, model, routerPath }: { name: string, model: {}, routerPath: any }) {
     this.name = name;
     this.model = model;
-    this.routerPath = routerPath
+    this.routerPath = routerPath;
   }
 
-  render() : HTMLElement{
-  return document.createElement('')
+  render() : HTMLElement {
+    return document.createElement('');
   }
 }
 
-export default Component
+export default Component;
