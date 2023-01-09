@@ -1,14 +1,14 @@
 addDoc(collectionRef, {
-  title: titleTask,
-  deadline: deadlineTask,
-  createdAt: serverTimestamp(),
-  createdBy: email,
-  invited_members: result,
-  joined_members: '',
-  questions: '',
-  checklist: false,
-  timer: 0,
-  points: pointsTask,
+  // title: titleTask,
+  // deadline: deadlineTask,
+  // createdAt: serverTimestamp(),
+  // createdBy: email,
+  // invited_members: result,
+  // joined_members: '',
+  // questions: '',
+  // checklist: false,
+  // timer: 0,
+  // points: pointsTask,
 })
   .then((docRef) => {
     // add subtasks to firebase

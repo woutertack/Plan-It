@@ -11,6 +11,7 @@ import {
   arrayRemove,
 
 } from 'firebase/firestore';
+
 import Component from '../lib/Component';
 import Elements from '../lib/Elements';
 
@@ -31,8 +32,13 @@ class DashboardComponent extends Component {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   joinTask() {
-    const docRef = doc(database, 'projects', 'B9QZYfSyrAeEiTZkniD4');
+    const getTaskId = localStorage.getItem('taskId');
+
+    // this works but gives error
+    const docRef = doc(database, 'projects', getTaskId);
+
     // const collectionRef = collection(database, 'projects', 'B9QZYfSyrAeEiTZkniD4');
     const email = localStorage.getItem('emailUser');
 
@@ -43,7 +49,7 @@ class DashboardComponent extends Component {
       invited_members: arrayRemove(email),
     })
       .then(() => {
-        console.log('A New Document Field has been added to an existing document');
+        window.location.replace('/task');
       })
       .catch((error) => {
         console.log(error);
@@ -66,6 +72,9 @@ class DashboardComponent extends Component {
         className: 'label',
       }),
     );
+    // make a div for your projects
+    const yourProjectsInfo = document.createElement('div');
+    yourProjectsInfo.className = 'yourProjectsInfo';
 
     // GETTING YOUR PROJECTS FROM FIRESTORE
     const getModelInfo = (item: any) => {
@@ -102,7 +111,7 @@ class DashboardComponent extends Component {
     getDocs(q)
       .then((response) => {
         (response.docs.forEach((item) => {
-          yourProjectsContainer.appendChild(
+          yourProjectsInfo.appendChild(
             Elements.createButtonSecondary({
               className: 'taskInfo',
               onClick: () => {
@@ -119,6 +128,8 @@ class DashboardComponent extends Component {
       .catch((err) => {
         console.log(err.message);
       });
+
+    yourProjectsContainer.appendChild(yourProjectsInfo);
     mainDiv.appendChild(yourProjectsContainer);
 
     // GETTING PROJECTS YOU HAVE JOINED FROM FIRESTORE
@@ -131,17 +142,20 @@ class DashboardComponent extends Component {
         className: 'label',
       }),
     );
+    // make a div for projects you can join
+    const joinedInfo = document.createElement('div');
+    joinedInfo.className = 'joinedInfo';
 
     const joined = query(collectionRef, where('joined_members', 'array-contains', email));
 
     getDocs(joined)
       .then((response) => {
         (response.docs.forEach((item) => {
-          joinedContainer.appendChild(
+          joinedInfo.appendChild(
             Elements.createButtonSecondary({
               className: 'taskInfo',
               onClick: () => {
-                this.joinTask();
+                // this.joinTask();
                 localStorage.setItem('taskId', item.id);
                 window.location.replace('/task');
               },
@@ -155,6 +169,7 @@ class DashboardComponent extends Component {
       .catch((err) => {
         console.log(err.message);
       });
+    joinedContainer.appendChild(joinedInfo);
     mainDiv.appendChild(joinedContainer);
     // GETTING PROJECTS YOU HAVE JOINED FROM FIRESTORE
     const invitedContainer = document.createElement('div');
@@ -166,18 +181,21 @@ class DashboardComponent extends Component {
         className: 'label',
       }),
     );
+    // make a div for projects you are invited too
+    const invitedInfo = document.createElement('div');
+    invitedInfo.className = 'invitedInfo';
 
     const invited = query(collectionRef, where('invited_members', 'array-contains', email));
     getDocs(invited)
       .then((response) => {
         (response.docs.forEach((item) => {
-          invitedContainer.appendChild(
+          invitedInfo.appendChild(
             Elements.createButtonSecondary({
               className: 'taskInfo',
               onClick: () => {
-                this.joinTask();
                 localStorage.setItem('taskId', item.id);
-                // window.location.replace('/task');
+                this.joinTask();
+                console.log('tafgaz');
               },
               children: [
                 getModelInfo(item),
@@ -189,6 +207,7 @@ class DashboardComponent extends Component {
       .catch((err) => {
         console.log(err.message);
       });
+    invitedContainer.appendChild(invitedInfo);
     mainDiv.appendChild(invitedContainer);
     mainContainer.appendChild(mainDiv);
 

@@ -5,7 +5,7 @@ interface Options {
   className?:string,
   onClick?:()=> void,
   size?:number,
-  children? : [],
+  children? : any,
   innerHTML?: any,
   name?: string,
   type?: string,
@@ -57,7 +57,7 @@ const Elements = {
   // },
 
   createInput({
-    id = '', className = '', type = 'text', name = '', placeholder = '', value = '',
+    id = '', className = '', type = 'text', name = '', placeholder = '', value = '', textContent = ' ',
   }: Options) {
     const input = document.createElement('input');
     input.id = id;
@@ -66,6 +66,7 @@ const Elements = {
     input.className = className;
     input.placeholder = placeholder;
     input.value = value;
+    input.textContent = textContent;
     return input;
   },
 
@@ -113,6 +114,7 @@ const Elements = {
     return socialMedia;
   },
 
+  
   createLogo({ id = '', className = '', innerHTML = '' }: Options) {
     const logo = document.createElement('i');
     logo.id = id;
@@ -149,6 +151,19 @@ const Elements = {
     input.min = min;
     input.max = max;
     return input;
+  },
+
+  createTextarea({
+    id = '', className = '', name = '', placeholder = '', value = '', textContent = ' ',
+  }: Options) {
+    const textarea = document.createElement('textarea');
+    textarea.id = id;
+    textarea.name = name;
+    textarea.className = className;
+    textarea.placeholder = placeholder;
+    textarea.value = value;
+    textarea.textContent = textContent;
+    return textarea;
   },
 };
 
