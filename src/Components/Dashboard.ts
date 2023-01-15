@@ -56,6 +56,19 @@ class DashboardComponent extends Component {
       });
   }
 
+  deleteTask(taskId: any) {
+    const docRef = doc(database, 'projects', taskId);
+
+    deleteDoc(docRef)
+      .then(() => {
+        alert('Task deleted successfully');
+        window.location.replace('/dashboard');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     const mainContainer = document.createElement('main');
     mainContainer.appendChild(createHeader());
@@ -78,7 +91,9 @@ class DashboardComponent extends Component {
 
     // GETTING YOUR PROJECTS FROM FIRESTORE
     const getModelInfo = (item: any) => {
+      const taskId = item.id;
       const nameTask = document.createElement('h3');
+      nameTask.className = 'nameTask';
 
       const deadline = document.createElement('h4');
       const createdBy = document.createElement('h5');
@@ -88,14 +103,28 @@ class DashboardComponent extends Component {
       nameTask.innerHTML = ` ${item.data().title}`;
       deadline.innerHTML = `Deadline: ${item.data().deadline}`;
       points.innerHTML = `${item.data().points} points`;
+
+      // if its your task you can delete it
       if (item.data().createdBy === localStorage.getItem('emailUser')) {
         createdBy.innerHTML = 'Created by: You';
+
+        const deleteTask = document.createElement('button');
+        deleteTask.className = 'deleteTask';
+        deleteTask.innerHTML = 'Delete task';
+
+        deleteTask.addEventListener('click', (event) => {
+          event?.stopPropagation();
+          this.deleteTask(taskId);
+        });
+
+        createdBy.appendChild(deleteTask);
       } else {
         createdBy.innerHTML = `Created by: ${item.data().createdBy}`;
       }
 
+      //       taskDisplay.appendChild(nameTask);
+      // taskDisplay.appendChild(deleteTask);
       taskDisplay.appendChild(nameTask);
-
       taskDisplay.appendChild(deadline);
       taskDisplay.appendChild(points);
       taskDisplay.appendChild(createdBy);
@@ -195,7 +224,6 @@ class DashboardComponent extends Component {
               onClick: () => {
                 localStorage.setItem('taskId', item.id);
                 this.joinTask();
-                console.log('tafgaz');
               },
               children: [
                 getModelInfo(item),

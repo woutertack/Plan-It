@@ -17,6 +17,7 @@ class Component {
     this.routerPath = routerPath;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   render() : HTMLElement {
     return document.createElement('');
   }

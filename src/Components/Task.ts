@@ -51,7 +51,7 @@ class TaskComponent extends Component {
         description: '',
         deadline: '',
         completed: false,
-        questions: '',
+        questions: [],
         totalTime: 0,
       })
       .then(() => {
@@ -70,17 +70,41 @@ class TaskComponent extends Component {
 
     const descriptionInput = document.getElementById('inputField')?.value;
     const deadlineInput = document.getElementById('deadline')?.value;
-
-    const questionInput = document.getElementById('questions')?.value;
-
+    const savedTimer = localStorage.getItem('timer');
+    const questionText = document.getElementById('questions')?.value;
+    const user = localStorage.getItem('emailUser') || '';
+    const createdOn = new Date();
+    const question = {
+      questionInput: questionText,
+      createdBy: user,
+      createdAt: createdOn,
+  };
     const cb = document.querySelector('#completed');
     const completedChecked = cb?.checked;
 
+    // check if description is changed
+    if (descriptionInput === undefined) {
+      updateDoc(docRef, {
+
+        deadline: deadlineInput,
+        totalTime: savedTimer,
+        questions: arrayUnion(question),
+        completed: completedChecked,
+
+      })
+      .then(() => {
+          alert('Subtask updated');
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
     updateDoc(docRef, {
       description: descriptionInput,
       deadline: deadlineInput,
-      totalTime: 0,
-      questions: questionInput,
+      totalTime: savedTimer,
+      questions: arrayUnion(question),
       completed: completedChecked,
 
     })
@@ -91,6 +115,20 @@ class TaskComponent extends Component {
       .catch((error) => {
         console.log(error);
       });
+    }
+  }
+
+  deleteSubtask(itemId: any) {
+   const docRef = doc(database, 'subtasks', itemId);
+
+   deleteDoc(docRef)
+   .then(() => {
+     alert('Task deleted successfully');
+     window.location.replace('/task');
+   })
+   .catch((error) => {
+     console.log(error);
+   });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -171,15 +209,33 @@ class TaskComponent extends Component {
         className: 'showSubtask',
       }),
     );
+
     const getModelInfo = (item: any) => {
       // get date timestamp
       const itemId = item.id;
 
+      // eslint-disable-next-line no-param-reassign
       item = item.data();
+      console.log(item);
       const newElement = document.createElement('button');
       newElement.setAttribute('id', 'myBtn');
       newElement.className = 'subtaskBtn';
       newElement.innerHTML = item.title;
+
+      // show icon if task is completed
+      if (item.completed === true) {
+        newElement.style.backgroundColor = 'rgb(67 230 67)';
+       }
+
+      const deleteBtn = document.createElement('p');
+      deleteBtn.className = 'deleteBtn';
+      deleteBtn.innerHTML = 'X';
+
+      deleteBtn.addEventListener('click', (event) => {
+        event?.stopPropagation();
+        this.deleteSubtask(itemId);
+     });
+      newElement.appendChild(deleteBtn);
 
       newElement.addEventListener('click', () => {
         // add the subtask id to localstorage THIS DOESNT WORK
@@ -249,14 +305,6 @@ class TaskComponent extends Component {
           descriptionContainer.appendChild(inputField);
         }
 
-      // const saveButton = document.createElement('button');
-      // saveButton.innerHTML = 'Save';
-      // saveButton.addEventListener('click', () => {
-      //   description.textContent = inputField.value;
-      //   descriptionContainer.replaceChild(description, inputField);
-      // });
-      // descriptionContainer.appendChild(saveButton);
-
     modalForm.appendChild(descriptionContainer);
 
         modalForm.appendChild(
@@ -270,6 +318,7 @@ class TaskComponent extends Component {
             className: 'modal-input',
             id: 'deadline',
             type: 'date',
+            value: item.deadline,
           }),
         );
           // create a timer
@@ -280,7 +329,7 @@ class TaskComponent extends Component {
           });
 
           let timerInterval : any;
-          let timer = 0;
+          let timer: any = +item.totalTime;
 
           const startButton = Elements.createButton({
             className: 'start-button',
@@ -304,6 +353,9 @@ class TaskComponent extends Component {
               } else {
                 clearInterval(timerInterval);
                 startButton.textContent = 'Start';
+
+                // Store the value of timer in the local storage to push it to firebase
+                localStorage.setItem('timer', timer);
               }
             },
           });
@@ -326,6 +378,21 @@ class TaskComponent extends Component {
             value: '',
           }),
         );
+          // check if there are questions if so display them
+        if (item.questions && item.questions.length > 0) {
+          // Iterate the questions array
+          let i = 1;
+          item.questions.forEach((question: {
+            createdAt: any;createdBy: any; questionInput: any; }) => {
+            // Create an HTML element to display the question
+            const questionElement = document.createElement('div');
+            const date = question.createdAt.toDate().toLocaleString();
+            questionElement.innerHTML = `<p>Question ${i}: ${question.questionInput}</p><br> ${question.createdBy}, ${date}`;
+            // Append the question element to the webpage
+            modalForm.appendChild(questionElement);
+            i++;
+          });
+        }
 
         modalForm.appendChild(
           Elements.createP({
@@ -339,7 +406,7 @@ class TaskComponent extends Component {
             className: 'modal-input',
             id: 'completed',
             type: 'checkbox',
-            value: 'false',
+            checked: item.completed,
           }),
         );
         modalForm.appendChild(
@@ -348,13 +415,6 @@ class TaskComponent extends Component {
             id: 'save-button',
             textContent: 'save',
             onClick: () => {
-                console.log(document.getElementById('inputField')?.value);
-              console.log(document.getElementById('deadline')?.value);
-
-              console.log(timer);
-              console.log(document.getElementById('questions')?.value);
-              const cb = document.querySelector('#completed');
-            console.log(cb?.checked);
               this.addSubtaskInfo();
             },
           }),

@@ -127,6 +127,7 @@ class CreateTaskComponent extends Component {
       Elements.createInput({
         className: 'totalPoints',
         id: 'totalPoints',
+        type: 'number',
         placeholder: 'Give a number',
       }),
     );

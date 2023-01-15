@@ -20,7 +20,6 @@ const initFirebase = () => {
 };
 const app = initializeApp(firebaseConfig);
 
-
 export const database = getFirestore(app);
 
 export { initFirebase };

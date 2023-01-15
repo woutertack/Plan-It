@@ -5,7 +5,7 @@
 import Navigo from 'navigo';
 
 const Router = {
-  router: null,
+  router: null as Navigo | null,
   getRouter() {
     if (!this.router) {
       const rootUrl = '/';

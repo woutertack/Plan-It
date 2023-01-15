@@ -12,6 +12,7 @@ interface Options {
   placeholder?: string,
   src?: any,
   value?: string,
+  checked?: boolean,
 }
 const Elements = {
   createButton({
@@ -47,17 +48,8 @@ const Elements = {
     return button;
   },
 
-  // createHeader({ size=1, textContent ='', id= '', className=''}: Options){
-  //     if(size<1 || size>6) return null;
-  //     const header = document.createElement(`h${size}`);
-  //     header.id = id;
-  //     header.className= className
-  //     header.textContent =textContent;
-  //     return header;
-  // },
-
   createInput({
-    id = '', className = '', type = 'text', name = '', placeholder = '', value = '', textContent = ' ',
+    id = '', className = '', type = 'text', name = '', placeholder = '', value = '', textContent = ' ', checked = false,
   }: Options) {
     const input = document.createElement('input');
     input.id = id;
@@ -67,16 +59,20 @@ const Elements = {
     input.placeholder = placeholder;
     input.value = value;
     input.textContent = textContent;
+    input.checked = checked;
     return input;
   },
 
   createContainer({
-    id = '', className = '', innerHTML = '', children = [],
+    id = '', className = '', innerHTML = '', children = [],onClick
   }: Options) {
     const container = document.createElement('div');
     container.id = id;
     container.className = className;
     container.innerHTML = innerHTML;
+    if (onClick) {
+      container.addEventListener('click', () => { onClick(); });
+    }
     if (children.length) {
       children.forEach((child: any) => {
         if (child instanceof Element) {
@@ -114,7 +110,6 @@ const Elements = {
     return socialMedia;
   },
 
-  
   createLogo({ id = '', className = '', innerHTML = '' }: Options) {
     const logo = document.createElement('i');
     logo.id = id;

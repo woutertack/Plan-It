@@ -1,15 +1,4 @@
-import {
-  getDocs,
-  collection,
-  doc,
-  deleteDoc,
-} from 'firebase/firestore';
-import Component from '../lib/Component';
 import Elements from '../lib/Elements';
-
-import {
-  database,
-} from '../lib/Firebase';
 
 import { logout } from './Authentication/Auth';
 
@@ -22,7 +11,7 @@ function createHeader() {
       innerHTML: '<i class="fa-solid fa-bars"></i>',
       className: 'navbars',
       onClick: () => {
-        console.log('here comes navbar');
+
       },
     }),
   );
@@ -50,4 +39,5 @@ function createHeader() {
   return headerContainer;
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export { createHeader };

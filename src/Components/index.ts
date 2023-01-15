@@ -7,5 +7,5 @@ import TaskComponent from './Task';
 
 export {
   // eslint-disable-next-line max-len
-   LoginComponent, RegisterComponent, DashboardComponent, CreateTaskComponent, TaskComponent,
+  LoginComponent, RegisterComponent, DashboardComponent, CreateTaskComponent, TaskComponent,
 };

@@ -30,6 +30,7 @@ class App {
     const { name, routerPath } = component;
 
     // when component asks to rerender
+    // eslint-disable-next-line no-param-reassign
     component.reRender = () => this.showComponent(component);
 
     // add component to our app
