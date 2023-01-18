@@ -14,6 +14,7 @@ class LoginComponent extends Component {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   render() {
     const bodyLogin = document.createElement('div');
     bodyLogin.className = 'bodyLogin';

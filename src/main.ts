@@ -1,7 +1,7 @@
 import './css/style.css';
 import {
   // eslint-disable-next-line max-len
-  LoginComponent, RegisterComponent, DashboardComponent, CreateTaskComponent, TaskComponent,
+  LoginComponent, RegisterComponent, DashboardComponent, TaskComponent, CreateTaskComponent,
 } from './Components';
 import App from './App';
 
@@ -12,8 +12,8 @@ const initApp = () => {
   app.addComponent(new LoginComponent());
   app.addComponent(new RegisterComponent());
   app.addComponent(new DashboardComponent());
-  app.addComponent(new CreateTaskComponent());
   app.addComponent(new TaskComponent());
+  app.addComponent(new CreateTaskComponent());
 };
 
 window.addEventListener('load', initApp);

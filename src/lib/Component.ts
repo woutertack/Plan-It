@@ -9,7 +9,7 @@ class Component {
 
   routerPath;
 
-  reRender: () => void;
+  reRender: (() => void) | undefined;
 
   constructor({ name, model, routerPath }: { name: string, model: {}, routerPath: any }) {
     this.name = name;

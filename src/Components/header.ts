@@ -6,7 +6,6 @@ function createHeader() {
   const headerContainer = document.createElement('header');
   headerContainer.className = 'headerContainer';
 
-
   const menuWrap = document.createElement('div');
   menuWrap.className = 'menu-wrap';
 
@@ -15,6 +14,16 @@ function createHeader() {
   checkbox.className = 'toggler';
   menuWrap.appendChild(checkbox);
 
+  // subtasks where still showing when the menu was open, this fixes that
+  checkbox.addEventListener('change', () => {
+    const subtaskBtn = document.querySelector('.subtaskBtn') as HTMLElement;
+
+    if (checkbox.checked) {
+      subtaskBtn.style.display = 'none';
+    } else {
+      subtaskBtn.style.display = 'block';
+    }
+  });
   const hamburger = document.createElement('div');
   hamburger.className = 'hamburger';
   hamburger.innerHTML = '<div></div>';

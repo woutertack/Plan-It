@@ -3,13 +3,8 @@ import {
   collection,
   doc,
   deleteDoc,
-  addDoc,
   query,
   where,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-
 } from 'firebase/firestore';
 
 import Component from '../lib/Component';
@@ -20,6 +15,8 @@ import {
 } from '../lib/Firebase';
 
 import { createHeader } from './header';
+import joinTask from './Task/joinTask';
+// import deleteTask from './Task/deleteTask';
 
 class DashboardComponent extends Component {
   constructor() {
@@ -27,41 +24,16 @@ class DashboardComponent extends Component {
       name: 'dashboard',
       routerPath: '/dashboard',
       model: {
-
       },
     });
   }
 
   // eslint-disable-next-line class-methods-use-this
-  joinTask() {
-    const getTaskId = localStorage.getItem('taskId');
-
-    // this works but gives error
-    const docRef = doc(database, 'projects', getTaskId);
-
-    // const collectionRef = collection(database, 'projects', 'B9QZYfSyrAeEiTZkniD4');
-    const email = localStorage.getItem('emailUser');
-
-    // invitedMembers.push(email);
-
-    updateDoc(docRef, {
-      joined_members: arrayUnion(email),
-      invited_members: arrayRemove(email),
-    })
-      .then(() => {
-        window.location.replace('/task');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   deleteTask(taskId: any) {
     const docRef = doc(database, 'projects', taskId);
 
     deleteDoc(docRef)
       .then(() => {
-        alert('Task deleted successfully');
         window.location.replace('/dashboard');
       })
       .catch((error) => {
@@ -135,8 +107,6 @@ class DashboardComponent extends Component {
       }
       taskDisplay.appendChild(createdBy);
 
-      // let users delete their own task NOT FINISHED YET
-
       return taskDisplay;
     };
     const email = localStorage.getItem('emailUser');
@@ -190,7 +160,6 @@ class DashboardComponent extends Component {
             Elements.createButtonSecondary({
               className: 'taskInfo',
               onClick: () => {
-                // this.joinTask();
                 localStorage.setItem('taskId', item.id);
                 window.location.replace('/task');
               },
@@ -229,7 +198,7 @@ class DashboardComponent extends Component {
               className: 'taskInfo',
               onClick: () => {
                 localStorage.setItem('taskId', item.id);
-                this.joinTask();
+                joinTask();
               },
               children: [
                 getModelInfo(item),

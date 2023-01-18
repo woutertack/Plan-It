@@ -1,30 +1,29 @@
 /* eslint-disable @typescript-eslint/indent */
 import {
-  getDocs,
+
   collection,
   doc,
   getDoc,
-  deleteDoc,
-  addDoc,
+  onSnapshot,
   query,
   where,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  collectionGroup,
-  onSnapshot,
-  getFirestore,
+
 } from 'firebase/firestore';
-import Component from '../lib/Component';
-import Elements from '../lib/Elements';
+import Component from '../../lib/Component';
+import Elements from '../../lib/Elements';
 
 import {
   database,
-} from '../lib/Firebase';
+} from '../../lib/Firebase';
 
 import {
   createHeader,
-} from './header';
+} from '../header';
+
+import addSubtask from '../Subtask/addSubtask';
+import addSubtaskInfo from '../Subtask/addSubtaskInfo';
+import deleteSubtask from '../Subtask/deleteSubtask';
+import showCompletedSubtasks from '../Subtask/showCompletedSubtasks';
 
 class TaskComponent extends Component {
   constructor() {
@@ -38,155 +37,17 @@ class TaskComponent extends Component {
     });
   }
 
-  // this will add the created subtask to firebase
-  addSubtask() {
-    const collectionRef: any = collection(database, 'subtasks');
-    const taskId = localStorage.getItem('taskId') || '';
-    const subtask = document.getElementById('subtaskName')?.value;
-
-    addDoc(collectionRef, {
-
-        task: taskId,
-        title: subtask,
-        description: '',
-        deadline: '',
-        completed: false,
-        questions: [],
-        totalTime: 0,
-      })
-      .then(() => {
-        alert('Subtask added');
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  addSubtaskInfo() {
-    const subtaskId = localStorage.getItem('subtaskId') || '';
-
-    const docRef = doc(database, 'subtasks', subtaskId);
-
-    const descriptionInput = document.getElementById('inputField')?.value;
-    const deadlineInput = document.getElementById('deadline')?.value;
-    const savedTimer = localStorage.getItem('timer');
-    const questionText = document.getElementById('questions')?.value;
-    const user = localStorage.getItem('emailUser') || '';
-    const createdOn = new Date();
-    const question = {
-      questionInput: questionText,
-      createdBy: user,
-      createdAt: createdOn,
-  };
-    const cb = document.querySelector('#completed');
-    const completedChecked = cb?.checked;
-
-    // check if description is changed
-    if (descriptionInput === undefined) {
-      updateDoc(docRef, {
-
-        deadline: deadlineInput,
-        totalTime: savedTimer,
-        questions: arrayUnion(question),
-        completed: completedChecked,
-
-      })
-      .then(() => {
-          alert('Subtask updated');
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-    updateDoc(docRef, {
-      description: descriptionInput,
-      deadline: deadlineInput,
-      totalTime: savedTimer,
-      questions: arrayUnion(question),
-      completed: completedChecked,
-
-    })
-    .then(() => {
-        alert('Subtask updated');
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
-  }
-
-  deleteSubtask(itemId: any) {
-   const docRef = doc(database, 'subtasks', itemId);
-
-   deleteDoc(docRef)
-   .then(() => {
-     alert('Task deleted successfully');
-     window.location.replace('/task');
-   })
-   .catch((error) => {
-     console.log(error);
-   });
-  }
-
   // eslint-disable-next-line class-methods-use-this
   clearInput() {
-    const getValue = document.getElementById('subtaskName') || '';
-    if (getValue.value != '') {
+    const getValue = document.getElementById('subtaskName') as HTMLInputElement || null;
+
+    if (getValue?.value !== '') {
       getValue.value = '';
     }
   }
 
-  showCompletedSubtasks() {
-    const taskId = localStorage.getItem('taskId') || '';
-    const collectionRef = collection(database, 'subtasks');
-
-    const docRef = doc(database, 'projects', taskId);
-    let completedSubtasks = 0;
-    let totalSubtasks = 0;
-
-    // Get all subtasks for the task
-    const q = query(collectionRef, where('task', '==', taskId));
-    onSnapshot(q, (snapshot) => {
-      totalSubtasks = snapshot.size;
-        snapshot.forEach((subtask) => {
-          if (subtask.data().completed === true) {
-            completedSubtasks++;
-          }
-        });
-
-        const displayContainer = document.getElementById('subtask-display');
-        displayContainer.innerHTML = `${completedSubtasks} / ${totalSubtasks}`;
-
-        // if all subtasks are completed, change the task to completed
-        if (completedSubtasks === totalSubtasks) {
-          updateDoc(docRef, {
-            checklist: true,
-          })
-            .then(() => {
-              console.log('task is completed');
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          updateDoc(docRef, {
-            checklist: false,
-          })
-            .then(() => {
-              console.log('task is not completed');
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-      });
-  }
-
   render() {
-    this.showCompletedSubtasks();
+    showCompletedSubtasks();
     const mainContainer = document.createElement('main');
     mainContainer.appendChild(createHeader());
 
@@ -196,7 +57,6 @@ class TaskComponent extends Component {
     // get the item data throught id
     const taskId = localStorage.getItem('taskId') || '';
 
-    // const collectionRef = collection(database, 'projects');
     const docRef = doc(database, 'projects', taskId);
 
     getDoc(docRef)
@@ -231,8 +91,7 @@ class TaskComponent extends Component {
         className: 'Add',
         textContent: 'Add',
         onClick: () => {
-          // this.createSubtask();
-          this.addSubtask();
+          addSubtask();
 
           this.clearInput();
         },
@@ -278,7 +137,7 @@ class TaskComponent extends Component {
 
       // show icon if task is completed
       if (item.completed === true) {
-        newElement.style.backgroundColor = 'rgb(67 230 67)';
+        newElement.style.backgroundColor = 'rgb(97 234 97)';
        }
 
       const deleteBtn = document.createElement('p');
@@ -287,7 +146,7 @@ class TaskComponent extends Component {
 
       deleteBtn.addEventListener('click', (event) => {
         event?.stopPropagation();
-        this.deleteSubtask(itemId);
+        deleteSubtask(itemId);
      });
       newElement.appendChild(deleteBtn);
 
@@ -343,7 +202,6 @@ class TaskComponent extends Component {
           editButton.innerHTML = 'Edit';
           editButton.addEventListener('click', () => {
             const inputField : any = document.createElement('textarea');
-            // inputField.type = 'text';
             inputField.value = description.textContent;
             inputField.className = 'modal-input-description';
             inputField.setAttribute('id', 'inputField');
@@ -353,7 +211,6 @@ class TaskComponent extends Component {
           descriptionContainer.appendChild(editButton);
         } else {
           const inputField = document.createElement('textarea');
-          // inputField.type = 'text';
           inputField.value = '';
           inputField.setAttribute('id', 'inputField');
           inputField.className = 'modal-input-description';
@@ -447,6 +304,8 @@ class TaskComponent extends Component {
              <p class="infoQuestion">By: ${question.createdBy}, ${date}</p>`;
             // Append the question element to the webpage
             modalForm.appendChild(questionElement);
+
+            // eslint-disable-next-line no-plusplus
             i++;
           });
         }
@@ -472,7 +331,7 @@ class TaskComponent extends Component {
             id: 'save-button',
             textContent: 'save',
             onClick: () => {
-              this.addSubtaskInfo();
+              addSubtaskInfo();
             },
           }),
         );
@@ -505,6 +364,7 @@ class TaskComponent extends Component {
 
     const q = query(collectionRef, where('task', '==', taskId));
     onSnapshot(q, (response) => {
+      // eslint-disable-next-line array-callback-return
       response.docChanges().map((item: any) => {
         if (item.type === 'added') {
           showSubtaskContainer.appendChild(

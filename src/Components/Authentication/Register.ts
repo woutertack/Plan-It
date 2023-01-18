@@ -5,11 +5,6 @@
 import Component from '../../lib/Component';
 import Elements from '../../lib/Elements';
 import { register } from './Auth';
-// import {
-//   getAuth,
-//   createUserWithEmailAndPassword,
-//   updateProfile
-// } from 'firebase/auth'
 
 class RegisterComponent extends Component {
   constructor() {
@@ -22,6 +17,7 @@ class RegisterComponent extends Component {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   render() {
     // create a home container
     const bodyRegister = document.createElement('div');
