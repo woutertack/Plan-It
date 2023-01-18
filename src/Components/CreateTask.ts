@@ -44,26 +44,30 @@ class CreateTaskComponent extends Component {
     }
 
     // add task to firebase
-    addDoc(collectionRef, {
-      title: titleTask,
-      deadline: deadlineTask,
-      createdAt: serverTimestamp(),
-      createdBy: email,
-      invited_members: result,
-      joined_members: '',
-      questions: '',
-      checklist: false,
-      timer: 0,
-      points: pointsTask,
-    })
-      .then((docRef) => {
-        console.log('Document written with ID: ', docRef.id);
-
-        window.location.replace('/dashboard');
+    if (titleTask !== '' && deadlineTask !== '' && pointsTask !== '') {
+      addDoc(collectionRef, {
+        title: titleTask,
+        deadline: deadlineTask,
+        createdAt: serverTimestamp(),
+        createdBy: email,
+        invited_members: result,
+        joined_members: '',
+        questions: '',
+        checklist: false,
+        timer: 0,
+        points: pointsTask,
       })
-      .catch((err) => {
-        alert(err.message);
-      });
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef.id);
+
+          window.location.replace('/dashboard');
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } else {
+      alert('Please fill in all fields!');
+    }
   }
 
   render() {
@@ -94,6 +98,7 @@ class CreateTaskComponent extends Component {
         className: 'titleTask',
         id: 'titleTask',
         placeholder: 'Title task',
+        required: true,
       }),
     );
 
@@ -112,7 +117,7 @@ class CreateTaskComponent extends Component {
         type: 'date',
         min: '2023-01-01',
         max: '2025-12-31',
-
+        required: true,
       }),
     );
 
@@ -129,6 +134,7 @@ class CreateTaskComponent extends Component {
         id: 'totalPoints',
         type: 'number',
         placeholder: 'Give a number',
+        required: true,
       }),
     );
 

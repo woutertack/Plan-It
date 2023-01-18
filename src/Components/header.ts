@@ -6,15 +6,37 @@ function createHeader() {
   const headerContainer = document.createElement('header');
   headerContainer.className = 'headerContainer';
 
-  headerContainer.appendChild(
-    Elements.createSocialMediaButton({
-      innerHTML: '<i class="fa-solid fa-bars"></i>',
-      className: 'navbars',
-      onClick: () => {
 
-      },
-    }),
-  );
+  const menuWrap = document.createElement('div');
+  menuWrap.className = 'menu-wrap';
+
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.className = 'toggler';
+  menuWrap.appendChild(checkbox);
+
+  const hamburger = document.createElement('div');
+  hamburger.className = 'hamburger';
+  hamburger.innerHTML = '<div></div>';
+  menuWrap.appendChild(hamburger);
+
+  const menu = document.createElement('div');
+  menu.className = 'menu';
+  menu.innerHTML = `
+    <div>
+      <div>
+        <ul class="menuList">
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/leaderboard">Leaderboard</a></li>
+          <li><a href="/">Logout</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  `;
+
+  menuWrap.appendChild(menu);
+  headerContainer.appendChild(menuWrap);
 
   headerContainer.appendChild(
     Elements.createSocialMediaButton({

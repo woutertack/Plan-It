@@ -92,6 +92,8 @@ class DashboardComponent extends Component {
     // GETTING YOUR PROJECTS FROM FIRESTORE
     const getModelInfo = (item: any) => {
       const taskId = item.id;
+      const headerTask = document.createElement('div');
+      headerTask.className = 'headerTask';
       const nameTask = document.createElement('h3');
       nameTask.className = 'nameTask';
 
@@ -101,8 +103,18 @@ class DashboardComponent extends Component {
       const taskDisplay = document.createElement('div');
 
       nameTask.innerHTML = ` ${item.data().title}`;
+      headerTask.appendChild(nameTask);
+      if (item.data().checklist === true) {
+        const icon = document.createElement('p');
+        icon.className = 'icon';
+        icon.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
+        headerTask.appendChild(icon);
+      }
+      taskDisplay.appendChild(headerTask);
       deadline.innerHTML = `Deadline: ${item.data().deadline}`;
+      taskDisplay.appendChild(deadline);
       points.innerHTML = `${item.data().points} points`;
+      taskDisplay.appendChild(points);
 
       // if its your task you can delete it
       if (item.data().createdBy === localStorage.getItem('emailUser')) {
@@ -121,12 +133,6 @@ class DashboardComponent extends Component {
       } else {
         createdBy.innerHTML = `Created by: ${item.data().createdBy}`;
       }
-
-      //       taskDisplay.appendChild(nameTask);
-      // taskDisplay.appendChild(deleteTask);
-      taskDisplay.appendChild(nameTask);
-      taskDisplay.appendChild(deadline);
-      taskDisplay.appendChild(points);
       taskDisplay.appendChild(createdBy);
 
       // let users delete their own task NOT FINISHED YET

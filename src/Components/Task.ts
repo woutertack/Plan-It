@@ -139,7 +139,54 @@ class TaskComponent extends Component {
     }
   }
 
+  showCompletedSubtasks() {
+    const taskId = localStorage.getItem('taskId') || '';
+    const collectionRef = collection(database, 'subtasks');
+
+    const docRef = doc(database, 'projects', taskId);
+    let completedSubtasks = 0;
+    let totalSubtasks = 0;
+
+    // Get all subtasks for the task
+    const q = query(collectionRef, where('task', '==', taskId));
+    onSnapshot(q, (snapshot) => {
+      totalSubtasks = snapshot.size;
+        snapshot.forEach((subtask) => {
+          if (subtask.data().completed === true) {
+            completedSubtasks++;
+          }
+        });
+
+        const displayContainer = document.getElementById('subtask-display');
+        displayContainer.innerHTML = `${completedSubtasks} / ${totalSubtasks}`;
+
+        // if all subtasks are completed, change the task to completed
+        if (completedSubtasks === totalSubtasks) {
+          updateDoc(docRef, {
+            checklist: true,
+          })
+            .then(() => {
+              console.log('task is completed');
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          updateDoc(docRef, {
+            checklist: false,
+          })
+            .then(() => {
+              console.log('task is not completed');
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      });
+  }
+
   render() {
+    this.showCompletedSubtasks();
     const mainContainer = document.createElement('main');
     mainContainer.appendChild(createHeader());
 
@@ -193,22 +240,29 @@ class TaskComponent extends Component {
     );
 
     mainContainer.appendChild(createSubTaskcontainer);
-    const SubtaskContainer = document.createElement('div');
-    SubtaskContainer.appendChild(
+    const subtaskContainer = document.createElement('div');
+    subtaskContainer.appendChild(
       Elements.createP({
         textContent: 'Click on a subtask for more info',
         className: 'label',
       }),
     );
-    mainContainer.appendChild(SubtaskContainer);
-    const showSubtaskContainer = document.createElement('div');
-    showSubtaskContainer.className = 'showSubtaskContainer';
-    showSubtaskContainer.appendChild(
-      Elements.createContainer({
-        id: 'showSubtask',
-        className: 'showSubtask',
+    subtaskContainer.appendChild(
+      Elements.createP({
+        textContent: 'COMPLETION',
+        className: 'completion',
       }),
     );
+    subtaskContainer.appendChild(
+      Elements.createP({
+        className: 'subtask-display',
+        id: 'subtask-display',
+
+      }),
+    );
+    mainContainer.appendChild(subtaskContainer);
+    const showSubtaskContainer = document.createElement('div');
+    showSubtaskContainer.className = 'showSubtaskContainer';
 
     const getModelInfo = (item: any) => {
       // get date timestamp
@@ -216,7 +270,7 @@ class TaskComponent extends Component {
 
       // eslint-disable-next-line no-param-reassign
       item = item.data();
-      console.log(item);
+
       const newElement = document.createElement('button');
       newElement.setAttribute('id', 'myBtn');
       newElement.className = 'subtaskBtn';
@@ -280,28 +334,29 @@ class TaskComponent extends Component {
 
         if (item.description) {
           const description = document.createElement('p');
-          description.className = 'modal-input';
+          description.className = 'modal-input-description';
           description.setAttribute('id', 'description');
           description.textContent = item.description;
           descriptionContainer.appendChild(description);
           const editButton = document.createElement('button');
+          editButton.className = 'editButton';
           editButton.innerHTML = 'Edit';
           editButton.addEventListener('click', () => {
-            const inputField : any = document.createElement('input');
-            inputField.type = 'text';
+            const inputField : any = document.createElement('textarea');
+            // inputField.type = 'text';
             inputField.value = description.textContent;
-            inputField.className = 'modal-input';
+            inputField.className = 'modal-input-description';
             inputField.setAttribute('id', 'inputField');
             descriptionContainer.replaceChild(inputField, description);
             editButton.style.display = 'none'; // Hide the editButton
           });
           descriptionContainer.appendChild(editButton);
         } else {
-          const inputField = document.createElement('input');
-          inputField.type = 'text';
+          const inputField = document.createElement('textarea');
+          // inputField.type = 'text';
           inputField.value = '';
           inputField.setAttribute('id', 'inputField');
-          inputField.className = 'modal-input';
+          inputField.className = 'modal-input-description';
           descriptionContainer.appendChild(inputField);
         }
 
@@ -371,23 +426,25 @@ class TaskComponent extends Component {
         );
 
         modalForm.appendChild(
-          Elements.createInput({
-            className: 'modal-input',
+          Elements.createTextarea({
+            className: 'modal-input-questions',
             id: 'questions',
-            type: 'text',
             value: '',
           }),
         );
           // check if there are questions if so display them
         if (item.questions && item.questions.length > 0) {
           // Iterate the questions array
-          let i = 1;
+          let i : number = 1;
           item.questions.forEach((question: {
             createdAt: any;createdBy: any; questionInput: any; }) => {
             // Create an HTML element to display the question
             const questionElement = document.createElement('div');
             const date = question.createdAt.toDate().toLocaleString();
-            questionElement.innerHTML = `<p>Question ${i}: ${question.questionInput}</p><br> ${question.createdBy}, ${date}`;
+            questionElement.innerHTML = `<p class='modal-label'>Question ${i}:</p>
+             <p class='textQuestion'>${question.questionInput}</p>
+           
+             <p class="infoQuestion">By: ${question.createdBy}, ${date}</p>`;
             // Append the question element to the webpage
             modalForm.appendChild(questionElement);
             i++;
@@ -435,15 +492,6 @@ class TaskComponent extends Component {
           // Hide the modal
           modal.style.display = 'none';
         });
-
-        // Add a click event listener to the modal background
-        // I DISABLED THIS BCS IT INTERFEREs WITH USING THE INPUT FIELDS
-        // modal.addEventListener('click', (event) => {
-        //   // If the user clicked on the modal background (not the modal content), hide the modal
-        //   if (event.target === modal) {
-        //     modal.style.display = 'none';
-        //   }
-        // });
 
         // Display the modal
         modal.style.display = 'block';

@@ -13,6 +13,8 @@ interface Options {
   src?: any,
   value?: string,
   checked?: boolean,
+  href?: any,
+  required?: boolean,
 }
 const Elements = {
   createButton({
@@ -49,7 +51,7 @@ const Elements = {
   },
 
   createInput({
-    id = '', className = '', type = 'text', name = '', placeholder = '', value = '', textContent = ' ', checked = false,
+    id = '', className = '', type = 'text', name = '', placeholder = '', value = '', textContent = ' ', checked = false, required = false,
   }: Options) {
     const input = document.createElement('input');
     input.id = id;
@@ -60,11 +62,12 @@ const Elements = {
     input.value = value;
     input.textContent = textContent;
     input.checked = checked;
+    input.required = required;
     return input;
   },
 
   createContainer({
-    id = '', className = '', innerHTML = '', children = [],onClick
+    id = '', className = '', innerHTML = '', children = [], onClick,
   }: Options) {
     const container = document.createElement('div');
     container.id = id;
@@ -135,7 +138,7 @@ const Elements = {
   },
 
   createCalendar({
-    textContent = '', type = '', className = '', id = '', value = '', min = '', max = '',
+    textContent = '', type = '', className = '', id = '', value = '', min = '', max = '', required = false,
   }) {
     const input = document.createElement('input');
     input.type = type;
@@ -145,6 +148,7 @@ const Elements = {
     input.value = value;
     input.min = min;
     input.max = max;
+    input.required = required;
     return input;
   },
 
@@ -160,6 +164,19 @@ const Elements = {
     textarea.textContent = textContent;
     return textarea;
   },
+
+  createLink({
+    id = '', className = '', innerHTML = '', href = '', textContent = ' ',
+  }: Options) {
+    const link = document.createElement('a');
+    link.id = id;
+    link.className = className;
+    link.innerHTML = innerHTML;
+    link.href = href;
+    link.textContent = textContent;
+    return link;
+  },
+
 };
 
 export default Elements;
