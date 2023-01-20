@@ -96,7 +96,7 @@ class DashboardComponent extends Component {
       if (item.data().checklist === true) {
         const user = localStorage.getItem('userId') || '';
         const docRef = doc(database, 'users', user);
-        const completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || {};
+        const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '{}');
 
         // check if the points have been added to the user already or not, if not add them
         if (completedTasks[taskId] === true) {
@@ -104,7 +104,7 @@ class DashboardComponent extends Component {
         } else {
           // eslint-disable-next-line @typescript-eslint/no-shadow
           getDoc(docRef).then((doc) => {
-            const currentPoints = parseInt(doc.data().points) || 0;
+            const currentPoints = parseInt(doc.data()?.points) || 0;
             const itemPoints = parseInt(item.data().points);
             console.log(currentPoints, itemPoints);
             updateDoc(docRef, {

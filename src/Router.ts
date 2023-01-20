@@ -9,7 +9,7 @@ const Router = {
   getRouter() {
     if (!this.router) {
       const rootUrl = '/';
-      this.router = new Navigo(rootUrl, false);
+      this.router = new Navigo(rootUrl);
     }
     return this.router;
   },

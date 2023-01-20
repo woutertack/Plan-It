@@ -17,13 +17,13 @@ class App {
     initFirebase();
   }
 
-  clearParent() {
-    while (this.parent?.firstChild) {
-      this.parent.removeChild(this.parent.lastChild);
-    }
-  }
+  // clearParent() {
+  //   while (this.parent?.firstChild) {
+  //     this.parent.removeChild(this.parent.lastChild);
+  //   }
+  // }
 
-  addComponent(component) {
+  addComponent(component: any) {
     if (!(component instanceof Component)) return;
 
     // destructure component
@@ -31,7 +31,7 @@ class App {
 
     // when component asks to rerender
     // eslint-disable-next-line no-param-reassign
-    component.reRender = () => this.showComponent(component);
+    component.reRender = () => this.showComponent({ name, props: null });
 
     // add component to our app
     this.components.push(component);
@@ -39,7 +39,7 @@ class App {
     // add to router
     Router.getRouter().on(
       routerPath,
-      (params) => {
+      (params: any) => {
         this.showComponent({
           name,
           props: params,
@@ -48,12 +48,13 @@ class App {
     ).resolve();
   }
 
-  showComponent({ name, props }) {
-    const foundComponent = this.components.find((component) => component.name === name);
+  showComponent({ name, props }: { name: any; props: any; }) {
+    // eslint-disable-next-line max-len
+    const foundComponent = this.components.find((component: { name: any; }) => component.name === name);
     if (foundComponent) {
-      this.clearParent();
+      // this.clearParent();
       if (props) foundComponent.props = props;
-      this.parent.appendChild(foundComponent.render());
+      this.parent?.appendChild(foundComponent.render());
     }
   }
 }

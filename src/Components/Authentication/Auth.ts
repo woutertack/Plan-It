@@ -70,17 +70,15 @@ function signInWithGoogle() {
       const { email } = result.user;
       const username : string = email?.substring(0, email.indexOf('@'));
       // check if user is in database already
-      const { isNewUser } = getAdditionalUserInfo(result);
+      const isNewUser: any | null = getAdditionalUserInfo(result);
 
-      if (isNewUser) {
+      // eslint-disable-next-line eqeqeq
+      if (isNewUser == true) {
         await addDoc(collection(database, 'users'), {
           userEmail: email,
           userName: username,
           points: 0,
         });
-        // .then((docRef) => {
-        //   localStorage.setItem('docId', docRef.id);
-        // });
       }
       localStorage.setItem('emailUser', email);
       window.location.replace('/dashboard');
@@ -120,9 +118,10 @@ function githubLogin() {
       const { email } = result.user;
       const username : string = email?.substring(0, email.indexOf('@'));
       // check if user is in database already
-      const { isNewUser } = getAdditionalUserInfo(result);
+      const isNewUser: any | null = getAdditionalUserInfo(result);
 
-      if (isNewUser) {
+      // eslint-disable-next-line eqeqeq
+      if (isNewUser == true) {
         await addDoc(collection(database, 'users'), {
           userEmail: email,
           userName: username,
