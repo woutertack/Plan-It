@@ -100,13 +100,13 @@ class DashboardComponent extends Component {
 
         // check if the points have been added to the user already or not, if not add them
         if (completedTasks[taskId] === true) {
-          console.log('task  completed ');
+          console.log('points already added');
         } else {
           // eslint-disable-next-line @typescript-eslint/no-shadow
           getDoc(docRef).then((doc) => {
             const currentPoints = parseInt(doc.data()?.points) || 0;
             const itemPoints = parseInt(item.data().points);
-            console.log(currentPoints, itemPoints);
+
             updateDoc(docRef, {
               points: currentPoints + itemPoints,
             });
