@@ -69,6 +69,7 @@ button {
 	text-transform: uppercase;
 	font-weight: bold;
 	transition: transform 80ms ease-in;
+	cursor: pointer;
 }
 
 button:hover{
@@ -94,7 +95,7 @@ input:focus{
 .fa-solid{
   display:flex;
 	justify-content:center;
-	cursor: pointer;
+	
 	color: var(--primary-color)
 }
 
@@ -114,7 +115,8 @@ input:focus{
 	display:flex;
 	justify-content:center;
 	font-size: 60px;
-	color: var(--primary-color)
+	color: var(--primary-color);
+	cursor: auto;
 }
 .title{
 	
@@ -199,7 +201,7 @@ input:focus{
 	font-size: 40px;
 	padding-top: 30px;
 	padding-bottom: 10px;
-	/* border-bottom: solid 2px var(--primary-transparant); THIS IS TO MAKE A LINE*/
+	border-bottom: 2px solid var(--primary-color);
 }
 
 .navbars{
@@ -222,6 +224,7 @@ input:focus{
 	font-size: 30px;
 	padding-top: 8px;
 	padding-right: 28px;
+	cursor: pointer;
 }
 
 
@@ -254,7 +257,7 @@ input:focus{
 }
 
 .createTaskContainer,.mainDiv{
-	border-top: 2px solid var(--primary-color);
+
     height: calc(100% - 100px);
     padding: 2px 6%;
     
@@ -266,11 +269,7 @@ input:focus{
 		
 		
 }
-@media only screen and (max-width: 500px) {
-  .mainDiv {
-    /* max-height: 500px; */
-  }
-}
+
 .createTaskContainer input{
 	width: 250px;
 }
@@ -308,9 +307,7 @@ input:focus{
 	text-underline-offset: 6px;
 }
 
-.taskTitle{
 
-}
 
 .headerTask{
 	display: flex;
@@ -373,9 +370,7 @@ input:focus{
 	margin-bottom: 30px;
 }
 
-.taskcontainer{
-	border-top: 2px solid var(--primary-color)
-}
+
 
 .taskTitle{
 	font-size: 28px;
@@ -713,4 +708,48 @@ height: 50px;
 	padding: 0;
 	margin: 0;
 }
+
+
+/* Leaderboard */
+.podium{
+	font-size: 110px;
+	margin-bottom: 10px;
+}
+
+.fa-ranking-star{
+	margin-top: 35px;
+	margin-bottom: 35px;
+}
+
+.leaderboardContainer{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.memberDiv{
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	width: 500px;
+	border-radius: 20px;
+	
+	background-color: var(--primary-transparant);
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+
+
+}
+
+@media only screen and (max-width: 500px) {
+	.memberDiv{
+		width: 90%;
+		font-size: 8px;
+	}
+	}
+
 

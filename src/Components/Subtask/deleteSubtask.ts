@@ -9,8 +9,8 @@ import {
 } from '../../lib/Firebase';
 
 export default function deleteSubtask(itemId: any) {
+  
   const docRef = doc(database, 'subtasks', itemId);
-
   deleteDoc(docRef)
   .then(() => {
     window.location.replace('/task');

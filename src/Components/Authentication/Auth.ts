@@ -36,6 +36,7 @@ function register() {
   addDoc(collectionRef, {
     userEmail: email,
     userName: username,
+    points: 0,
   });
 }
 
@@ -67,7 +68,7 @@ function signInWithGoogle() {
     .then(async (result: any) => {
       // The signed-in user info.
       const { email } = result.user;
-      const username = email?.substring(0, email.indexOf('@'));
+      const username : string = email?.substring(0, email.indexOf('@'));
       // check if user is in database already
       const { isNewUser } = getAdditionalUserInfo(result);
 
@@ -75,7 +76,11 @@ function signInWithGoogle() {
         await addDoc(collection(database, 'users'), {
           userEmail: email,
           userName: username,
+          points: 0,
         });
+        // .then((docRef) => {
+        //   localStorage.setItem('docId', docRef.id);
+        // });
       }
       localStorage.setItem('emailUser', email);
       window.location.replace('/dashboard');
@@ -104,17 +109,33 @@ function facebookLogin() {
 }
 
 // Sign in with Github
+// you can only use this if your github email has not been used to sign up with firebase yet
 function githubLogin() {
   const auth = getAuth();
   const githubProvider = new GithubAuthProvider();
 
   signInWithPopup(auth, githubProvider)
-    .then(() => {
+    .then(async (result: any) => {
+    // The signed-in user info.
+      const { email } = result.user;
+      const username : string = email?.substring(0, email.indexOf('@'));
+      // check if user is in database already
+      const { isNewUser } = getAdditionalUserInfo(result);
+
+      if (isNewUser) {
+        await addDoc(collection(database, 'users'), {
+          userEmail: email,
+          userName: username,
+          points: 0,
+        });
+      }
+      localStorage.setItem('emailUser', email);
       window.location.replace('/dashboard');
-    })
-    .catch((err) => {
-      alert(err.message);
-      console.log(err.message);
+    }).catch((error) => {
+    // Handle Errors here.
+      const errorMessage = error.message;
+      // The AuthCredential type that was used.
+      alert(`An error has occurred, the error is ${errorMessage}!`);
     });
 }
 

@@ -38,7 +38,6 @@ function createHeader() {
           <li><a href="/dashboard">Home</a></li>
           <li><a href="/leaderboard">Leaderboard</a></li>
           <li><a href="/">Logout</a></li>
-          <li><a href="/contact">Contact</a></li>
         </ul>
       </div>
     </div>

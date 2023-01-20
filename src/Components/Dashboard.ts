@@ -1,3 +1,5 @@
+/* eslint-disable radix */
+/* eslint-disable class-methods-use-this */
 import {
   getDocs,
   collection,
@@ -5,6 +7,8 @@ import {
   deleteDoc,
   query,
   where,
+  updateDoc,
+  getDoc,
 } from 'firebase/firestore';
 
 import Component from '../lib/Component';
@@ -16,7 +20,6 @@ import {
 
 import { createHeader } from './header';
 import joinTask from './Task/joinTask';
-// import deleteTask from './Task/deleteTask';
 
 class DashboardComponent extends Component {
   constructor() {
@@ -28,8 +31,19 @@ class DashboardComponent extends Component {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // get user id from logged in user from firebase and put it in localstorage to use it later
+  async getId() {
+    const email = localStorage.getItem('emailUser');
+    const q = query(collection(database, 'users'), where('userEmail', '==', email));
+    const querySnapshot = await getDocs(q);
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    querySnapshot.forEach((doc) => {
+      localStorage.setItem('userId', doc.id);
+    });
+  }
+
   deleteTask(taskId: any) {
+    // delete task from firestore
     const docRef = doc(database, 'projects', taskId);
 
     deleteDoc(docRef)
@@ -42,9 +56,10 @@ class DashboardComponent extends Component {
   }
 
   render() {
+    this.getId();
     const mainContainer = document.createElement('main');
     mainContainer.appendChild(createHeader());
-
+    this.getId();
     const mainDiv = document.createElement('div');
     mainDiv.className = 'mainDiv';
 
@@ -76,7 +91,32 @@ class DashboardComponent extends Component {
 
       nameTask.innerHTML = ` ${item.data().title}`;
       headerTask.appendChild(nameTask);
+
+      // check if the task has been completed, if so add points to the user
       if (item.data().checklist === true) {
+        const user = localStorage.getItem('userId') || '';
+        const docRef = doc(database, 'users', user);
+        const completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || {};
+
+        // check if the points have been added to the user already or not, if not add them
+        if (completedTasks[taskId] === true) {
+          console.log('task  completed ');
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          getDoc(docRef).then((doc) => {
+            const currentPoints = parseInt(doc.data().points) || 0;
+            const itemPoints = parseInt(item.data().points);
+            console.log(currentPoints, itemPoints);
+            updateDoc(docRef, {
+              points: currentPoints + itemPoints,
+            });
+            // mark the task as completed
+            completedTasks[taskId] = true;
+            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+          });
+        }
+
+        // add icon to the task when completed
         const icon = document.createElement('p');
         icon.className = 'icon';
         icon.innerHTML = '<i class="fa-regular fa-circle-check"></i>';

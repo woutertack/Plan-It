@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/indent */
 import {
 
@@ -233,15 +234,22 @@ class TaskComponent extends Component {
             value: item.deadline,
           }),
         );
+
           // create a timer
-          const timerLabel = Elements.createP({
-            className: 'modal-label',
-            textContent: 'Timer:',
-            id: 'timer',
-          });
 
           let timerInterval : any;
           let timer: any = +item.totalTime;
+          const hours = Math.floor(timer / 3600);
+          const minutes = Math.floor((timer % 3600) / 60);
+          const seconds = timer % 60;
+
+          const timerLabel = Elements.createP({
+            className: 'modal-label',
+            textContent: `Timer: ${hours.toString().padStart(2, '0')}:${minutes
+              .toString()
+              .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
+            id: 'timer',
+          });
 
           const startButton = Elements.createButton({
             className: 'start-button',
