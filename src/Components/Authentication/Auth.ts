@@ -18,43 +18,62 @@ import {
 // register function
 function register() {
   const collectionRef = collection(database, 'users');
-  const username : string = (< HTMLInputElement >document.getElementById('register__username')).value;
-  const email : string = (< HTMLInputElement >document.getElementById('register__email')).value;
-  const password : string = (< HTMLInputElement >document.getElementById('register__password')).value;
+  const username : string = (< HTMLInputElement >document.getElementById('register_username')).value;
+  const email : string = (< HTMLInputElement >document.getElementById('register_email')).value;
+  const password : string = (< HTMLInputElement >document.getElementById('register_password')).value;
   const auth : any = getAuth();
-
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      // Profile updated!
-      localStorage.setItem('emailUser', email);
-      window.location.replace('./dashboard');
-    }).catch((error) => {
-      // An error occurred
-      console.log(error);
-    });
-
-  addDoc(collectionRef, {
-    userEmail: email,
-    userName: username,
-    points: 0,
-  });
+  // check if email is in correct format
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (emailRegex.test(email)) {
+    // check if password is longer than 6 characters
+    if (password.length > 6) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          // Profile updated!
+          localStorage.setItem('emailUser', email);
+          window.location.replace('./dashboard');
+        }).catch((error) => {
+          // An error occurred
+          console.log(error);
+        });
+      addDoc(collectionRef, {
+        userEmail: email,
+        userName: username,
+        points: 0,
+      });
+    } else {
+      // show text that password is too short
+      const passwordError : any = (< HTMLInputElement >document.getElementById('password_error') || '');
+      passwordError.innerHTML = 'Password is too short!';
+    }
+  } else {
+    // Email is not in correct format
+    const emailError : any = (< HTMLInputElement >document.getElementById('invalid_email_error') || '');
+    emailError.innerHTML = 'Email is not in correct format!';
+  }
 }
 
 // Sign in function
 function signin() {
-  const signinEmail = (< HTMLInputElement > document.getElementById('login__email')).value;
-  const signinPassw = (< HTMLInputElement > document.getElementById('login__password')).value;
+  const signinEmail = (< HTMLInputElement > document.getElementById('login_email')).value;
+  const signinPassw = (< HTMLInputElement > document.getElementById('login_password')).value;
   const auth = getAuth();
-
   signInWithEmailAndPassword(auth, signinEmail, signinPassw)
     .then(() => {
-      // Signed in
+    // Signed in
       localStorage.setItem('emailUser', signinEmail);
       window.location.replace('/dashboard');
     })
     .catch((error) => {
-      const errorMessage = error.message;
-      alert(`An error has occurred, the error is ${errorMessage}!`);
+      if (error.code === 'auth/wrong-password') {
+        const passwordError : any = (< HTMLInputElement >document.getElementById('password_error') || '');
+        passwordError.innerHTML = 'Password is incorrect!';
+      } else if (error.code === 'auth/invalid-email') {
+        const emailError : any = (< HTMLInputElement >document.getElementById('invalid_email_error') || '');
+        emailError.innerHTML = 'Email does not exist!';
+      } else {
+        alert('Give a valid email and password');
+      }
     });
 }
 

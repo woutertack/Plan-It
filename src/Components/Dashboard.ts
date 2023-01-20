@@ -68,7 +68,7 @@ class DashboardComponent extends Component {
 
     yourProjectsContainer.appendChild(
       Elements.createP({
-        textContent: 'Your project(s)',
+        textContent: 'Your task(s)',
         className: 'label',
       }),
     );
@@ -183,7 +183,7 @@ class DashboardComponent extends Component {
 
     joinedContainer.appendChild(
       Elements.createP({
-        textContent: 'Joined project(s)',
+        textContent: 'Joined task(s)',
         className: 'label',
       }),
     );
@@ -221,7 +221,7 @@ class DashboardComponent extends Component {
 
     invitedContainer.appendChild(
       Elements.createP({
-        textContent: 'Invited project(s)',
+        textContent: 'Invited task(s)',
         className: 'label',
       }),
     );

@@ -52,8 +52,8 @@ class RegisterComponent extends Component {
     // register form
     registerContainer.appendChild(
       Elements.createInput({
-        id: 'register__username',
-        className: 'register__username',
+        id: 'register_username',
+        className: 'register_username',
         type: 'text',
         placeholder: 'Username',
       }),
@@ -61,22 +61,35 @@ class RegisterComponent extends Component {
 
     registerContainer.appendChild(
       Elements.createInput({
-        id: 'register__email',
-        className: 'register__email',
+        id: 'register_email',
+        className: 'register_email',
         type: 'text',
         placeholder: 'Email',
+      }),
+    );
+    registerContainer.appendChild(
+      Elements.createP({
+        id: 'invalid_email_error',
+        className: 'invalid_email_error',
+
       }),
     );
 
     registerContainer.appendChild(
       Elements.createInput({
-        id: 'register__password',
-        className: 'register__password',
+        id: 'register_password',
+        className: 'register_password',
         type: 'password',
         placeholder: 'Password',
       }),
     );
+    registerContainer.appendChild(
+      Elements.createP({
+        id: 'password_error',
+        className: 'password_error',
 
+      }),
+    );
     registerContainer.appendChild(
       Elements.createBr(),
     );

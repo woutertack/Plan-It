@@ -192,6 +192,21 @@ input:focus{
 	background-color: var(--secondary-color);
 	border-color: var(--secondary-color)
 }
+.password_error{
+	display: flex;
+	justify-content: center;
+	color: red;
+	font-size: 13px;
+	margin: 0px;
+}
+
+.invalid_email_error{
+	margin: 0px;
+	display: flex;
+	justify-content: center;
+	color: red;
+	font-size: 13px;
+}
 
 /* header */
 .headerContainer{

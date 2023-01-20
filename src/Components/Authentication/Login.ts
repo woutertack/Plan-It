@@ -49,22 +49,34 @@ class LoginComponent extends Component {
     // Login form
     loginContainer.appendChild(
       Elements.createInput({
-        id: 'login__email',
-        className: 'login__email',
-        // type: inputEm,
+        id: 'login_email',
+        className: 'login_email',
         placeholder: 'Email',
+      }),
+    );
+    loginContainer.appendChild(
+      Elements.createP({
+        id: 'invalid_email_error',
+        className: 'invalid_email_error',
+
       }),
     );
 
     loginContainer.appendChild(
       Elements.createInput({
-        id: 'login__password',
-        className: 'login__password',
+        id: 'login_password',
+        className: 'login_password',
         type: 'password',
         placeholder: 'Password',
       }),
     );
 
+    loginContainer.appendChild(
+      Elements.createP({
+        id: 'password_error',
+        className: 'password_error',
+      }),
+    );
     loginContainer.appendChild(
       Elements.createBr(),
     );
